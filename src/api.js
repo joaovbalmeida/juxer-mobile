@@ -1,7 +1,6 @@
-import feathers from 'feathers/client';
-import socketio from 'feathers-socketio/client';
-import hooks from 'feathers-hooks';
-import auth from 'feathers-authentication-client';
+import feathers from '@feathersjs/feathers';
+import socketio from '@feathersjs/socketio-client';
+import auth from '@feathersjs/authentication-client';
 import io from 'socket.io-client';
 import { AsyncStorage } from 'react-native';
 
@@ -13,7 +12,6 @@ const socket = io('http://10.0.1.18:3030/', {
 
 const feathersClient = feathers()
   .configure(socketio(socket))
-  .configure(hooks())
   .configure(auth({
     storage: AsyncStorage,
   }));
@@ -30,12 +28,4 @@ export default {
   auth: feathersClient.authenticate,
   logout: feathersClient.logout,
   users: feathersClient.service('users'),
-  bills: feathersClient.service('bills'),
-  billStatuses: feathersClient.service('bill-statuses'),
-  menuItems: feathersClient.service('menu-items'),
-  menuItemStatuses: feathersClient.service('menu-item-statuses'),
-  menuCategories: feathersClient.service('menu-categories'),
-  surveyRates: feathersClient.service('survey-rates'),
-  surveys: feathersClient.service('surveys'),
 };
-

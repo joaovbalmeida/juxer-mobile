@@ -1,9 +1,15 @@
 import { createStackNavigator } from 'react-navigation';
 
-import MainScreen from '../screens/login';
+import CheckinScreen from '../screens/checkin';
+import HostStack from './host';
+import GuestStack from './guest';
 
-const AuthStack = createStackNavigator({
-  Main: MainScreen,
+const AppStack = createStackNavigator({
+  Checkin: CheckinScreen,
+  Host: HostStack,
+  Guest: GuestStack,
+}, {
+  initialRouteName: 'Checkin',
 });
 
-export default AuthStack;
+export default AppStack;

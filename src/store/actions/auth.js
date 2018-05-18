@@ -33,11 +33,11 @@ const resetUser = () => (
   }
 );
 
-const fetchUser = () => (
+const fetchUser = email => (
   (dispatch) => {
     dispatch(requestUser());
 
-    return api.users.find({ email: 'marcos@gmail.com' })
+    return api.users.find({ email })
       .then((response) => {
         dispatch(receiveUser(response.data[0]));
         return response;
@@ -73,8 +73,52 @@ const login = credentials => (
       strategy: 'local',
       ...credentials,
     }).then((response) => {
-      fetchUser()(dispatch).then(() => {
+      fetchUser(credentials.email)(dispatch).then(() => {
         dispatch(receiveToken(response.accessToken, true));
+      });
+      return response;
+    }, (error) => {
+      dispatch(receiveToken('', false));
+      return error;
+    });
+  }
+);
+
+const passportAuth = (credentials, token, provider) => (
+  (dispatch) => {
+    dispatch(requestToken());
+    return api.auth({
+      strategy: provider,
+      accessToken: token,
+    }).then((response) => {
+      fetchUser(credentials.email)(dispatch).then(() => {
+        dispatch(receiveToken(response.accessToken, true));
+      });
+      return response;
+    }, (error) => {
+      dispatch(receiveToken('', false));
+      return error;
+    });
+  }
+);
+
+const createUser = credentials => (
+  () => (
+    api.users.create({ ...credentials })
+      .then(response => response, error => error)
+  )
+);
+
+const passportLogin = (credentials, token, provider) => (
+  (dispatch) => {
+    dispatch(requestToken());
+
+    return createUser(credentials)(dispatch).then((response) => {
+      if (response.code !== 409 && response.code) {
+        return response;
+      }
+      passportAuth(credentials, token, provider)(dispatch).then((result) => {
+        dispatch(receiveToken(result.accessToken, true));
       });
       return response;
     }, (error) => {
@@ -103,4 +147,6 @@ export default {
   logout,
   fetchUser,
   checkToken,
+  createUser,
+  passportLogin,
 };

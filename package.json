@@ -8,13 +8,16 @@
   },
   "dependencies": {
     "@feathersjs/authentication-client": "^1.0.2",
+    "@feathersjs/commons": "^1.4.1",
     "@feathersjs/feathers": "^3.1.5",
     "@feathersjs/socketio-client": "^1.1.0",
     "prop-types": "^15.6.1",
     "react": "16.3.1",
     "react-native": "0.55.4",
+    "react-native-fbsdk": "^0.7.0",
     "react-navigation": "^2.0.1",
     "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
     "redux-persist": "^5.9.1",
     "redux-thunk": "^2.2.0",
     "socket.io-client": "^2.1.0"
